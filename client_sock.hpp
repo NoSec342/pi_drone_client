@@ -10,6 +10,8 @@
 #include <cstring>
 #include <unistd.h>
 
+// AICI VOI DEFINI FUNCTIILE DE CONECTARE CATRE DRONA
+
 class client_sock
 {
 private:
@@ -24,12 +26,15 @@ public:
     
     client_sock(const std::string& ip, const uint16_t& port);
     ~client_sock();
-    void SetPort(const uint16_t& fa_port);
-    void ConnectToServer(const std::string& ip, const uint16_t& port);
-    void WriteToServer(const std::string& fa_msg);
-    const std::string ReadFromServer();
-    
+    virtual void SetPort(const uint16_t& fa_port);
+    virtual void ConnectToServer(const std::string& ip, const uint16_t& port);
+    virtual void WriteToServer(const std::string& fa_msg);
+    virtual const std::string ReadFromServer();
+    virtual void Raise() const;
+
 };
+
+// AM REDEFINIT NISTE OPERATORI PENTRU A-MI FACE TREABA MAI USOARA
 
 std::ostream& operator<<(std::ostream& stream, client_sock& client)
 {
