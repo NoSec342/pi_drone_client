@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <termios.h>
-
+#include <thread>
+#include <threads.h>
 
 // O FUNCTIE PENTRU A CITI IN TIMP REAL DE LA TASTATURA TASTELE APASATE 
 
@@ -38,7 +39,7 @@ char GetKeystroke()
 
 int main(int argc, char **argv) {
     
-    const uint8_t FORWARD = 8, BACKWARDS = 9, LEFT = 7, RIGHT = 0, ROTATE_LEFT = 2, ROTATE_RIGHT = 3, MOTOR_POWER1 = 12, MOTOR_POWER2 = 13, MOTOR_POWER3 = 14,  MOTOR_POWER4 = 30;
+    const uint8_t FORWARD = 8, BACKWARDS = 9, LEFT = 7, RIGHT = 0, ROTATE_LEFT = 2, ROTATE_RIGHT = 3, MOTOR_POWER1 = 12, MOTOR_POWER2 = 13, MOTOR_POWER3 = 14,  POWER_DOWN = 30;
     
     uint16_t port = argc > 1 ? atoi(argv[1]) : 54000;
     std::cout << port << std::endl;
@@ -52,26 +53,77 @@ int main(int argc, char **argv) {
             switch(rd)
             {
                 case 'w':
-                    Client.WriteToServer(std::to_string(FORWARD));
+                {
+                    std::thread thd([&]
+                    {
+                        Client.WriteToServer(std::to_string(FORWARD));
+                    });
+                    thd.detach();
                     break;
+                }    
                 case 'a':
-                    Client.WriteToServer(std::to_string(LEFT));
+                {
+                    std::thread thd([&]
+                    {
+                        Client.WriteToServer(std::to_string(LEFT));
+                    });
+                    thd.detach();
                     break;
+                }  
                 case 's':
-                    Client.WriteToServer(std::to_string(BACKWARDS));
+                {
+                    std::thread thd([&]
+                    {
+                        Client.WriteToServer(std::to_string(BACKWARDS));
+                    });
+                    thd.detach();
                     break;
+                }  
                 case 'd':
-                    Client.WriteToServer(std::to_string(RIGHT));
+                {
+                    std::thread thd([&]
+                    {
+                        Client.WriteToServer(std::to_string(RIGHT));
+                    });
+                    thd.detach();
                     break;
+                }  
                 case 'e':
-                    Client.WriteToServer(std::to_string(ROTATE_RIGHT));
+                {
+                    std::thread thd([&]
+                    {
+                        Client.WriteToServer(std::to_string(ROTATE_RIGHT));
+                    });
+                    thd.detach();
                     break;
+                };
                 case 'q':
-                    Client.WriteToServer(std::to_string(ROTATE_LEFT));
+                {
+                    std::thread thd([&]
+                    {
+                        Client.WriteToServer(std::to_string(ROTATE_LEFT));
+                    });
+                    thd.detach();
                     break;
+                }
                 case ' ':
-                    Client.WriteToServer(std::to_string(MOTOR_POWER1));
+                {
+                    std::thread thd([&]
+                    {
+                        Client.WriteToServer(std::to_string(MOTOR_POWER2));
+                    });
+                    thd.detach();
                     break;
+                }
+                case 'x':
+                {
+                    std::thread thd([&]
+                    {
+                        Client.WriteToServer(std::to_string(POWER_DOWN));
+                    });
+                    thd.detach();
+                    break;
+                }
                 default:
                     
                     break;

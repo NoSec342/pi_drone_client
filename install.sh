@@ -6,11 +6,14 @@ SOURCE_DIR=$(pwd)
 cmake ./ -B ./build
 cd build/ 
 make
-cd ..
-if [ $EUID == "0" ];then
-    ln -s "$SOURCE_DIR/build/pi_drone_client" /usr/bin/pi_drone_client
-    
-else
-    sudo ln -s "$SOURCE_DIR/build/pi_drone_client" /usr/bin/pi_drone_client
+if [ $? -eq 0 ];then
+
+	if [ $EUID == "0" ];then
+		cd $SOURCE_DIR
+		ln -s $SOURCE_DIR/build/pi_drone_client /usr/bin/pi_drone_client
+	elif [ $? -eq 0 ];then
+		cd $SOURCE_DIR
+		sudo ln -s $SOURCE_DIR/build/pi_drone_client /usr/bin/pi_drone_client
+	fi
 fi
-echo "Installation Done!"
+tput setaf 2; echo "Installation done!"
