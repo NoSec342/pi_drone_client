@@ -36,19 +36,9 @@ public:
 
 // AM REDEFINIT NISTE OPERATORI PENTRU A-MI FACE TREABA MAI USOARA
 
-std::ostream& operator<<(std::ostream& stream, client_sock& client)
-{
-    stream << client.ReadFromServer();
-    return stream;
-}
+std::ostream& operator<<(std::ostream& stream, client_sock& client);
 
-std::istream& operator>>(std::istream& stream, client_sock& client)
-{
-    std::string msg;
-    stream >> msg;
-    client.WriteToServer(msg);
-    return stream;
-}
+std::istream& operator>>(std::istream& stream, client_sock& client);
 
 
 #endif

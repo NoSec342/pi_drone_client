@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <termios.h>
 #include <thread>
-#include <threads.h>
 
 // O FUNCTIE PENTRU A CITI IN TIMP REAL DE LA TASTATURA TASTELE APASATE 
 
@@ -39,16 +38,31 @@ char GetKeystroke()
 
 int main(int argc, char **argv) {
     
-    const uint8_t FORWARD = 8, BACKWARDS = 9, LEFT = 7, RIGHT = 0, ROTATE_LEFT = 2, ROTATE_RIGHT = 3, MOTOR_POWER1 = 12, MOTOR_POWER2 = 13, MOTOR_POWER3 = 14,  POWER_DOWN = 30;
+    const char FORWARD = '3', BACKWARDS = '4', LEFT = '1', RIGHT = '2', ROTATE_LEFT = '5', ROTATE_RIGHT = 6, MOTOR_POWER1 = 8,  POWER_DOWN = 7;
     
     uint16_t port = argc > 1 ? atoi(argv[1]) : 54000;
     std::cout << port << std::endl;
-    std::string ip = argc > 2 ? std::string(argv[2]) : "127.0.0.1";
+    std::string ip = argc > 2 ? std::string(argv[2]) : "192.168.0.1";
     client_sock Client(ip ,port);
+    
+//     std::thread recv_err([&]{
+//         while(true)
+//         {
+//             std::string buffer;
+//             buffer = Client.ReadFromServer();
+//             if(!buffer.empty())
+//             {
+//                     fprintf(stdout, "Received; %s", buffer.c_str());
+//             }
+//             buffer.clear();
+//         }
+//         
+//     });
+//     recv_err.detach();
+    
+    
         while(true)
         {
-            
-            uint8_t msg;
             char rd = GetKeystroke();
             switch(rd)
             {
@@ -110,7 +124,7 @@ int main(int argc, char **argv) {
                 {
                     std::thread thd([&]
                     {
-                        Client.WriteToServer(std::to_string(MOTOR_POWER2));
+                        Client.WriteToServer(std::to_string(MOTOR_POWER1));
                     });
                     thd.detach();
                     break;
@@ -120,12 +134,13 @@ int main(int argc, char **argv) {
                     std::thread thd([&]
                     {
                         Client.WriteToServer(std::to_string(POWER_DOWN));
+                        
                     });
                     thd.detach();
                     break;
                 }
                 default:
-                    
+                    fprintf(stderr, "%c not found!\n", rd);
                     break;
             }
             

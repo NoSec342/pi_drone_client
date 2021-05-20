@@ -59,3 +59,16 @@ void client_sock::Raise() const
 }
 
 
+std::ostream& operator<<(std::ostream& stream, client_sock& client)
+{
+    stream << client.ReadFromServer();
+    return stream;
+}
+
+std::istream& operator>>(std::istream& stream, client_sock& client)
+{
+    std::string msg;
+    stream >> msg;
+    client.WriteToServer(msg);
+    return stream;
+}

@@ -8,5 +8,5 @@ install(TARGETS pi_drone_client RUNTIME DESTINATION bin)
 
 
 find_library(PTHREAD pthread)
-add_library(client_pi SHARED client_sock.cpp client_sock.hpp)
+add_library(client_pi STATIC client_sock.cpp client_sock.hpp)
 target_link_libraries(pi_drone_client PUBLIC client_pi ${PTHREAD})
